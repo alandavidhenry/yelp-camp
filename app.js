@@ -3,9 +3,21 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
+const Campground = require('./models/campground');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// var indexRouter = require('./routes/index');
+// var usersRouter = require('./routes/users');
+const campgroundRouter = require('./routes/campground');
+
+mongoose.connect('mongodb://localhost:27017/yelp-camp');
+
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "connection error:"));
+db.once("open", () => {
+    console.log("Database connected");
+});
 
 var app = express();
 
@@ -15,12 +27,15 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use(methodOverride('_method'));
+
+// app.use('/', indexRouter);
+// app.use('/users', usersRouter);
+app.use('/', campgroundRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
