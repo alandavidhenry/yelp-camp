@@ -38,6 +38,8 @@ app.use(methodOverride('_method'));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
+
+// app.use('/campgrounds'); USING THIS MEANS CAN REMOVE campgrounds FROM ROUTES IN campground.js
 app.use('/', campgroundRouter);
 
 // // catch 404 and forward to error handler
